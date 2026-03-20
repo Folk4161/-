@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecondHand Marketplace - หน้าหลัก</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav class="navbar">
+    <div class="logo">🛍️ SecondHand</div>
+    <ul class="nav-links">
+        <li><a href="index.html" class="active">หน้าแรก</a></li>
+        <li><a href="add-product.html">ลงสินค้า</a></li>
+        <li><a href="my-products.html">สินค้าของฉัน</a></li>
+    </ul>
+</nav>
+
+<div class="container">
+
+    <div class="card">
+        <h2>ค้นหาสินค้า</h2>
+        <div class="search-box" style="display: flex; gap: 10px;">
+            <input type="text" id="search" placeholder="พิมพ์ชื่อสินค้าเพื่อค้นหา..." style="flex: 3;">
+            
+            <select id="filterType" style="flex: 1;">
+                <option value="">ทั้งหมด</option>
+                <option value="sell">💰 ขาย</option>
+                <option value="exchange">🔄 แลก</option>
+            </select>
+        </div>
+    </div>
+
+    <hr style="border: 0.5px solid #eee; margin: 20px 0;">
+
+    <div class="grid" id="list">
+        </div>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>

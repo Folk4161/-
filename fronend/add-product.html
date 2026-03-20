@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ลงสินค้าใหม่ - SecondHand</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* สไตล์เฉพาะหน้าลงสินค้า เพื่อความสวยงาม */
+        .form-container {
+            max-width: 700px;
+            margin: 40px auto;
+        }
+
+        .form-title {
+            color: #ff3385;
+            margin-bottom: 25px;
+            text-align: center;
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+        /* จัด Grid ให้ช่อง Input เรียงสวยๆ */
+        .product-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        /* ช่องที่ต้องยาวเต็มแถว */
+        .full-width {
+            grid-column: span 2;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        input, textarea, select {
+            padding: 12px 15px;
+            border: 2px solid #f0f0f0;
+            border-radius: 12px;
+            background-color: #fcfcfc;
+            font-size: 15px;
+            transition: 0.3s;
+            outline: none;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            background-color: #fff;
+            border-color: #ff66b2;
+            box-shadow: 0 0 10px rgba(255, 102, 178, 0.15);
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        .btn-submit {
+            grid-column: span 2;
+            background: linear-gradient(135deg, #ff66b2, #ff3385);
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 15px;
+            border: none;
+            border-radius: 15px;
+            margin-top: 15px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 51, 133, 0.3);
+            transition: 0.3s;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 51, 133, 0.4);
+            filter: brightness(1.1);
+        }
+
+        .btn-back {
+            grid-column: span 2;
+            background: none;
+            border: none;
+            color: #888;
+            cursor: pointer;
+            text-decoration: underline;
+            margin-top: 10px;
+        }
+
+        /* สำหรับมือถือ */
+        @media (max-width: 600px) {
+            .product-form { grid-template-columns: 1fr; }
+            .full-width { grid-column: span 1; }
+            .btn-submit { grid-column: span 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">🛍️ SecondHand</div>
+        <ul class="nav-links">
+            <li><a href="index.html">หน้าแรก</a></li>
+            <li><a href="add-product.html" class="active">ลงสินค้า</a></li>
+            <li><a href="my-products.html">สินค้าของฉัน</a></li>
+        </ul>
+    </nav>
+
+    <div class="container form-container">
+        <div class="card">
+            <h2 class="form-title">➕ ลงประกาศสินค้าใหม่</h2>
+            
+            <form id="productForm" class="product-form">
+                <div class="form-group full-width">
+                    <label>ชื่อสินค้า</label>
+                    <input type="text" id="pTitle" required placeholder="เช่น กล้องฟิล์มสภาพดี">
+                </div>
+
+                <div class="form-group full-width">
+                    <label>รายละเอียดสินค้า</label>
+                    <textarea id="pDesc" rows="3" placeholder="ระบุสภาพสินค้า หรือตำหนิ..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>หมวดหมู่</label>
+                    <input type="text" id="pCategory" placeholder="เช่น เสื้อผ้า, ไอที">
+                </div>
+
+                <div class="form-group">
+                    <label>ประเภทประกาศ</label>
+                    <select id="pType">
+                        <option value="sell">💰 ขาย (ขายขาด)</option>
+                        <option value="exchange">🔄 แลกเปลี่ยน (หาของแลก)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>ราคา (บาท)</label>
+                    <input type="number" id="pPrice" value="0">
+                </div>
+
+                <div class="form-group">
+                    <label>ช่องทางติดต่อ (LINE / เบอร์โทร)</label>
+                    <input type="text" id="pContact" required placeholder="Line ID: xxxxx">
+                </div>
+
+                <div class="form-group full-width">
+                    <label>URL รูปภาพสินค้า</label>
+                    <input type="text" id="pImg" placeholder="https://example.com/image.jpg">
+                </div>
+
+                <button type="submit" class="btn-submit">🚀 ลงประกาศเลย!</button>
+                <button type="button" class="btn-back" onclick="location.href='index.html'">กลับหน้าหลัก</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("productForm").onsubmit = function(e) {
+            e.preventDefault(); // กันหน้าเว็บรีเฟรชเอง
+
+            // 1. ดึงข้อมูลจาก LocalStorage (ถ้าไม่มีให้เริ่มด้วย Array ว่าง)
+            let products = JSON.parse(localStorage.getItem("products")) || [];
+
+            // 2. สร้างก้อนข้อมูลสินค้า
+            const newProduct = {
+                id: Date.now(), // ใช้เวลาปัจจุบันเป็น ID (ไม่ซ้ำแน่นอน)
+                title: document.getElementById("pTitle").value,
+                desc: document.getElementById("pDesc").value,
+                category: document.getElementById("pCategory").value || "ทั่วไป",
+                type: document.getElementById("pType").value,
+                price: document.getElementById("pPrice").value,
+                contact: document.getElementById("pContact").value,
+                img: document.getElementById("pImg").value || 'https://via.placeholder.com/300'
+            };
+
+            // 3. เพิ่มสินค้าใหม่ลงไปใน Array
+            products.push(newProduct);
+
+            // 4. บันทึกกลับลง LocalStorage
+            localStorage.setItem("products", JSON.stringify(products));
+
+            // 5. แจ้งเตือนและกลับหน้าหลัก
+            alert("ลงประกาศสินค้าเรียบร้อยแล้ว! 🎉");
+            location.href = 'index.html';
+        };
+    </script>
+</body>
+</html>

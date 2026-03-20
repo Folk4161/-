@@ -1,0 +1,174 @@
+/* --- ส่วนกลาง (Global Styles) --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #fce4ec 0%, #e3f2fd 100%); /* พื้นหลังชมพู-ฟ้าอ่อน */
+    min-height: 100vh;
+    color: #333;
+}
+
+/* --- Navigation Bar --- */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #ff66b2; /* สีชมพูหลัก */
+    padding: 15px 10%;
+    color: white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo { font-weight: bold; font-size: 22px; }
+
+.nav-links { 
+    list-style: none; 
+    display: flex; 
+    gap: 20px; 
+}
+
+.nav-links a { 
+    color: white; 
+    text-decoration: none; 
+    font-weight: 500; 
+    transition: 0.3s;
+}
+
+.nav-links a:hover { opacity: 0.8; }
+
+/* --- Container หลัก --- */
+.container {
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+/* --- การ์ดสีขาว (ใช้ครอบส่วนค้นหา หรือ ฟอร์ม) --- */
+.card {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    margin-bottom: 30px;
+}
+
+/* --- ส่วนของ Input และ Form --- */
+.search-controls, .product-form {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+input, textarea, select {
+    padding: 12px;
+    border: 2px solid #eee;
+    border-radius: 12px;
+    outline: none;
+    font-size: 15px;
+    width: 100%; /* สำหรับหน้าลงสินค้า */
+    transition: 0.3s;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: #ff66b2;
+    box-shadow: 0 0 8px rgba(255,102,178,0.2);
+}
+
+/* --- ปุ่มต่างๆ --- */
+button {
+    cursor: pointer;
+    transition: 0.3s;
+    border: none;
+    font-weight: bold;
+}
+
+.btn-add, .btn-submit {
+    background: #ff66b2;
+    color: white;
+    padding: 12px 25px;
+    border-radius: 50px;
+    box-shadow: 0 4px 15px rgba(255, 102, 178, 0.3);
+}
+
+.btn-add:hover, .btn-submit:hover {
+    transform: scale(1.05);
+    background: #ff3385;
+}
+
+/* --- ระบบ Grid สินค้า --- */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 25px;
+}
+
+/* --- การ์ดสินค้าแต่ละชิ้น (.product) --- */
+.product {
+    background: white;
+    border-radius: 20px;
+    padding: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    transition: 0.3s;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.product:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 25px rgba(255, 102, 178, 0.15);
+}
+
+.product img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 15px;
+    margin-bottom: 15px;
+}
+
+.product h3 { font-size: 1.1rem; margin-bottom: 10px; color: #333; }
+.product b { color: #ff3385; font-size: 1.2rem; display: block; margin-bottom: 15px; }
+
+/* ปุ่มดูรายละเอียด */
+.btn-detail {
+    width: 100%;
+    background: #f0f0f0;
+    padding: 10px;
+    border-radius: 10px;
+    color: #555;
+}
+
+/* ปุ่มลบสินค้า (สำหรับหน้า My Products) */
+.btn-delete {
+    background: #ff4d4d;
+    color: white;
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    margin-top: 5px;
+}
+
+/* --- Responsive สำหรับมือถือ --- */
+@media (max-width: 600px) {
+    .search-controls {
+        flex-direction: column;
+    }
+    .navbar {
+        padding: 15px 5%;
+    }
+}
+/* สไตล์สำหรับเมนูที่กำลังใช้งาน */
+.nav-links a.active {
+    font-weight: bold;
+    border-bottom: 2px solid white; /* เพิ่มขีดเส้นใต้สีขาว */
+    padding-bottom: 5px;
+    opacity: 1; /* ให้ความสว่างเต็มที่ */
+}

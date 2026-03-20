@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>จัดการสินค้าของฉัน - SecondHand</title>
+    <link rel="stylesheet" href="style.css"> <style>
+        /* สไตล์เพิ่มเติมสำหรับหน้าจัดการสินค้า */
+        .manage-container {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header-section h1 {
+            color: #ff3385;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        /* ส่วนค้นหากึ่งกลางหน้าจอ */
+        .search-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        .search-card {
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 700px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        .search-controls {
+            display: flex;
+            gap: 15px;
+        }
+
+        .search-controls input { flex: 3; margin: 0; }
+        .search-controls select { flex: 1; margin: 0; }
+
+        /* การ์ดสินค้าฉบับจัดการ */
+        .product-item {
+            background: white;
+            border-radius: 20px;
+            padding: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: 0.3s;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(255, 102, 178, 0.15);
+        }
+
+        .badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .badge-sell { background: #ff66b2; }
+        .badge-exchange { background: #4da6ff; }
+
+        .product-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 15px;
+            margin-bottom: 15px;
+        }
+
+        .product-info h3 {
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .price-tag {
+            color: #ff3385;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        /* ปุ่มจัดการ */
+        .manage-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: auto;
+        }
+
+        .btn-view { background: #f0f0f0; color: #555; }
+        .btn-delete { background: #ff4d4d; color: white; }
+        .btn-delete:hover { background: #e60000; }
+
+        @media (max-width: 600px) {
+            .search-controls { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">🛍️ SecondHand</div>
+        <ul class="nav-links">
+            <li><a href="index.html">หน้าแรก</a></li>
+            <li><a href="add-product.html">ลงสินค้า</a></li>
+            <li><a href="my-products.html" class="active">สินค้าของฉัน</a></li>
+        </ul>
+    </nav>
+
+    <div class="manage-container">
+        <div class="header-section">
+            <h1>📦 สินค้าของฉัน</h1>
+            <p>จัดการ แก้ไข หรือลบรายการสินค้าที่คุณเคยลงประกาศไว้</p>
+        </div>
+
+        <div class="search-wrapper">
+            <div class="search-card">
+                <div class="search-controls">
+                    <input type="text" id="searchMyProduct" placeholder="ค้นหาจากชื่อสินค้าของคุณ...">
+                    <select id="filterMyType">
+                        <option value="">ทั้งหมด</option>
+                        <option value="sell">💰 ขาย</option>
+                        <option value="exchange">🔄 แลก</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid" id="myProductList">
+            </div>
+    </div>
+
+    <script>
+        // --- ส่วนของ JavaScript ---
+
+        // 1. ดึงข้อมูลสินค้าจาก LocalStorage
+        let products = JSON.parse(localStorage.getItem("products")) || [];
+
+        const listContainer = document.getElementById("myProductList");
+        const searchInput = document.getElementById("searchMyProduct");
+        const typeSelect = document.getElementById("filterMyType");
+
+        // 🔄 ฟังก์ชันแสดงผล (Render)
+        function renderMyProducts() {
+            listContainer.innerHTML = "";
+            const keyword = searchInput.value.toLowerCase();
+            const typeValue = typeSelect.value;
+
+            // กรองสินค้า (ในระบบ Frontend นี้เราจะโชว์ทั้งหมดที่อยู่ในเครื่อง)
+            let filtered = products.filter(p => {
+                const matchTitle = p.title.toLowerCase().includes(keyword);
+                const matchType = typeValue === "" || p.type === typeValue;
+                return matchTitle && matchType;
+            });
+
+            if (filtered.length === 0) {
+                listContainer.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align:center; padding: 100px 20px;">
+                        <h2 style="color: #ccc;">😢 ไม่พบสินค้าของคุณ</h2>
+                        <p style="color: #999; margin-top: 10px;">ลองลงประกาศสินค้าชิ้นแรกดูสิ!</p>
+                        <br>
+                        <a href="add-product.html" style="color: #ff66b2; text-decoration: none; font-weight: bold;">+ ไปหน้าลงสินค้า</a>
+                    </div>
+                `;
+                return;
+            }
+
+            filtered.forEach(p => {
+                const item = document.createElement("div");
+                item.className = "product-item";
+                item.innerHTML = `
+                    <div class="badge ${p.type === 'sell' ? 'badge-sell' : 'badge-exchange'}">
+                        ${p.type === 'sell' ? '💰 ขาย' : '🔄 แลก'}
+                    </div>
+                    <img src="${p.img || 'https://via.placeholder.com/300'}" alt="product image">
+                    <div class="product-info">
+                        <h3>${p.title}</h3>
+                        <p class="price-tag">${p.type === 'sell' ? p.price + ' บาท' : 'ของแลกเปลี่ยน'}</p>
+                        <p style="font-size: 13px; color: #888; margin-bottom: 15px;">🆔 รหัสสินค้า: ${p.id}</p>
+                    </div>
+                    <div class="manage-actions">
+                        <button class="btn-view" onclick="viewItem(${p.id})">👁️ ดู</button>
+                        <button class="btn-delete" onclick="removeItem(${p.id})">🗑️ ลบ</button>
+                    </div>
+                `;
+                listContainer.appendChild(item);
+            });
+        }
+
+        // 🗑️ ฟังก์ชันลบสินค้า
+        function removeItem(id) {
+            if (confirm("ยืนยันว่าจะลบรายการสินค้านี้ใช่หรือไม่?")) {
+                // กรองเอาตัวที่ไม่ได้เลือกไว้
+                products = products.filter(item => item.id !== id);
+                // บันทึกลง LocalStorage ใหม่
+                localStorage.setItem("products", JSON.stringify(products));
+                // วาดหน้าจอใหม่
+                renderMyProducts();
+            }
+        }
+
+        // 👁️ ฟังก์ชันดูรายละเอียดเบื้องต้น
+        function viewItem(id) {
+            const p = products.find(item => item.id === id);
+            if (p) {
+                alert(`📌 รายละเอียดสินค้า\n----------------------\nชื่อ: ${p.title}\nราคา: ${p.price || 0} บาท\nติดต่อ: ${p.contact || '-'}\nรายละเอียด: ${p.desc || '-'}`);
+            }
+        }
+
+        // 🔎 ผูกเหตุการณ์
+        searchInput.addEventListener("input", renderMyProducts);
+        typeSelect.addEventListener("change", renderMyProducts);
+
+        // รันครั้งแรก
+        renderMyProducts();
+
+    </script>
+</body>
+</html>
